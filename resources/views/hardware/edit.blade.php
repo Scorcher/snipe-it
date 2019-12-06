@@ -47,7 +47,7 @@
   @include ('partials.forms.edit.status')
 
   @if (!$item->id)
-      @include ('partials.forms.checkout-selector', ['user_select' => 'true','asset_select' => 'true', 'location_select' => 'true', 'style' => 'display:none;'])
+      @include ('partials.forms.checkout-selector', ['user_select' => 'true','asset_select' => 'true', 'location_select' => 'true', 'style' => 'display:none;', 'default' => 'location'])
 
       @include ('partials.forms.edit.user-select', ['translated_name' => trans('admin/hardware/form.checkout_to'), 'fieldname' => 'assigned_user', 'style' => 'display:none;', 'required' => 'false'])
 
@@ -153,7 +153,7 @@
 
                     if (data == true) {
                         $("#assignto_selector").show();
-                        $("#assigned_user").show();
+                        $("#assigned_location").show();
 
                         $("#selected_status_status").removeClass('text-danger');
                         $("#selected_status_status").addClass('text-success');
