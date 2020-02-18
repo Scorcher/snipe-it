@@ -230,6 +230,11 @@ class BulkAssetsController extends Controller
                         $asset->save();
                     }
 
+                    if ($asset->location_id) {
+                        Asset::where('assigned_type', 'App\Models\Asset')->where('assigned_to', $asset_id)
+                            ->update(['location_id' => $asset->location_id]);
+                    }
+    
                     if ($error) {
                         array_merge_recursive($errors, $asset->getErrors()->toArray());
                     }

@@ -79,6 +79,12 @@ class AssetCheckoutController extends Controller
             }
 
             if ($asset->checkOut($target, $admin, $checkout_at, $expected_checkin, e($request->get('note')), $request->get('name'))) {
+
+                if ($asset->location_id) {
+                    Asset::where('assigned_type', 'App\Models\Asset')->where('assigned_to', $assetId)
+                        ->update(['location_id' => $asset->location_id]);
+                }
+    
                 return redirect()->route("hardware.index")->with('success', trans('admin/hardware/message.checkout.success'));
             }
 

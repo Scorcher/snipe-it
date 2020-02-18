@@ -93,6 +93,11 @@ class AssetCheckinController extends Controller
             $data['model_name'] = $asset->model->name;
             $data['model_number'] = $asset->model->model_number;
 
+            if ($asset->location_id) {
+                Asset::where('assigned_type', 'App\Models\Asset')->where('assigned_to', $assetId)
+                    ->update(['location_id' => $asset->location_id]);
+            }
+
             if ((isset($user)) && ($backto =='user')) {
                 return redirect()->route("users.show", $user->id)->with('success', trans('admin/hardware/message.checkin.success'));
             }

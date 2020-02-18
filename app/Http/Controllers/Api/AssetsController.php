@@ -529,16 +529,15 @@ class AssetsController extends Controller
                     $location = $target->location_id;
                 } elseif (($request->filled('assigned_asset')) && ($target = Asset::find($request->get('assigned_asset')))) {
                     $location = $target->location_id;
-
-                    Asset::where('assigned_type', '\\App\\Models\\Asset')->where('assigned_to', $id)
-                        ->update(['location_id' => $target->location_id]);
-
                 } elseif (($request->filled('assigned_location')) && ($target = Location::find($request->get('assigned_location')))) {
                     $location = $target->id;
                 }
 
                 if (isset($target)) {
                     $asset->checkOut($target, Auth::user(), date('Y-m-d H:i:s'), '', 'Checked out on asset update', e($request->get('name')), $location);
+
+                    Asset::where('assigned_type', 'App\Models\Asset')->where('assigned_to', $id)
+                    ->update(['location_id' => $location]);
                 }
 
                 return response()->json(Helper::formatStandardApiResponse('success', $asset, trans('admin/hardware/message.update.success')));
@@ -653,6 +652,8 @@ class AssetsController extends Controller
 
 
         if ($asset->checkOut($target, Auth::user(), $checkout_at, $expected_checkin, $note, $asset_name, $asset->location_id)) {
+            Asset::where('assigned_type', 'App\Models\Asset')->where('assigned_to', $asset->id)
+                ->update(['location_id' => $asset->location_id]);
             return response()->json(Helper::formatStandardApiResponse('success', ['asset'=> e($asset->asset_tag)], trans('admin/hardware/message.checkout.success')));
         }
 
@@ -702,6 +703,8 @@ class AssetsController extends Controller
 
         if ($asset->save()) {
             $asset->logCheckin($target, e(request('note')));
+            Asset::where('assigned_type', 'App\Models\Asset')->where('assigned_to', $asset->id)
+                ->update(['location_id' => $asset->location_id]);
             return response()->json(Helper::formatStandardApiResponse('success', ['asset'=> e($asset->asset_tag)], trans('admin/hardware/message.checkin.success')));
         }
 

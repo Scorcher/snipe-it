@@ -397,7 +397,7 @@ class AssetsController extends Controller
 
              // Update any assigned assets with the new location_id from the parent asset
 
-            Asset::where('assigned_type', '\\App\\Models\\Asset')->where('assigned_to', $asset->id)
+            Asset::where('assigned_type', 'App\Models\Asset')->where('assigned_to', $asset->id)
                 ->update(['location_id' => $asset->location_id]);
 
             // Redirect to the new asset page
