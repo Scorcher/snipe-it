@@ -47,7 +47,6 @@
             iconsPrefix: 'fa',
             cookie: true,
             cookieExpire: '2y',
-            cookieIdTable: '{{ Route::currentRouteName() }}',
             mobileResponsive: true,
             maintainSelected: true,
             trimOnSearch: false,
