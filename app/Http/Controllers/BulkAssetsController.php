@@ -198,6 +198,10 @@ class BulkAssetsController extends Controller
                 return redirect()->route('hardware/bulkcheckout')->withInput()->with('error', trans('admin/hardware/message.checkout.no_assets_selected'));
             }
 
+            if (preg_match('@ADMIN-\d+@', $request->get('note')) !== 1) {
+                return redirect()->to("hardware/bulkcheckout")->with('error', trans('validation.hsdrn.note_is_empty'));
+            }
+
             $asset_ids = array_filter($request->get('selected_assets'));
 
             foreach ($asset_ids as $asset_id) {

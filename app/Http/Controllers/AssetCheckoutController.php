@@ -58,6 +58,8 @@ class AssetCheckoutController extends Controller
                 return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.does_not_exist'));
             } elseif (!$asset->availableForCheckout()) {
                 return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.checkout.not_available'));
+            } elseif (preg_match('@ADMIN-\d+@', $request->get('note')) !== 1) {
+                return redirect()->back()->with('error', trans('validation.hsdrn.note_is_empty'));
             }
             $this->authorize('checkout', $asset);
             $admin = Auth::user();

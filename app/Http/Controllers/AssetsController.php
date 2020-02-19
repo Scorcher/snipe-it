@@ -114,6 +114,9 @@ class AssetsController extends Controller
     {
         $this->authorize(Asset::class);
 
+        if (preg_match('@ADMIN-\d+@', $request->input('notes')) !== 1) {
+            return back()->with('notes', trans('validation.hsdrn.note_is_empty'));
+        }
 
         $asset = new Asset();
         $asset->model()->associate(AssetModel::find($request->input('model_id')));
@@ -304,6 +307,10 @@ class AssetsController extends Controller
             // Redirect to the asset management page with error
             return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.does_not_exist'));
         }
+        if (preg_match('@ADMIN-\d+@', $request->input('notes')) !== 1) {
+            return redirect()->back()->with('error', trans('validation.hsdrn.note_is_empty'));
+        }
+
         $this->authorize($asset);
 
         $asset->status_id = $request->input('status_id', null);

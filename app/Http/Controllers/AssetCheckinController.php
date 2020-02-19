@@ -48,6 +48,8 @@ class AssetCheckinController extends Controller
         if (is_null($asset = Asset::find($assetId))) {
             // Redirect to the asset management page with error
             return redirect()->route('hardware.index')->with('error', trans('admin/hardware/message.does_not_exist'));
+        } elseif (preg_match('@ADMIN-\d+@', $request->get('note')) !== 1) {
+            return redirect()->back()->with('error', trans('validation.hsdrn.note_is_empty'));
         }
 
         $this->authorize('checkin', $asset);

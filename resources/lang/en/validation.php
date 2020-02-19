@@ -135,4 +135,8 @@ return array(
 
     'attributes' => [],
 
+    'hsdrn' => [
+        'note_is_empty' => 'You must set the reason of changes in Note field and it must consist a ticket number (ex. ADMIN-123)'
+    ],
+
 );
