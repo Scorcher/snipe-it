@@ -112,6 +112,10 @@ class LicensesController extends Controller
         $license->termination_date  = $request->input('termination_date');
         $license->user_id           = Auth::id();
 
+        if (preg_match('@ADMIN-\d+@', $request->input('notes')) !== 1) {
+            return redirect()->back()->withInput()->with('error', trans('validation.hsdrn.note_is_empty'));
+        }
+
         if ($license->save()) {
             return redirect()->route("licenses.index")->with('success', trans('admin/licenses/message.create.success'));
         }
@@ -187,6 +191,10 @@ class LicensesController extends Controller
         $license->manufacturer_id   =  $request->input('manufacturer_id');
         $license->supplier_id       = $request->input('supplier_id');
         $license->category_id       = $request->input('category_id');
+
+        if (preg_match('@ADMIN-\d+@', $request->input('notes')) !== 1) {
+            return redirect()->back()->withInput()->with('error', trans('validation.hsdrn.note_is_empty'));
+        }
 
         if ($license->save()) {
             return redirect()->route('licenses.show', ['license' => $licenseId])->with('success', trans('admin/licenses/message.update.success'));
@@ -320,7 +328,11 @@ class LicensesController extends Controller
             }
             $target = null;
 
-
+            if (preg_match('@ADMIN-\d+@', $request->input('note')) !== 1) {
+                return redirect()->back()->withInput()->with('error', trans('validation.hsdrn.note_is_empty'));
+            }
+    
+    
             // This item is checked out to a an asset
             if (request('checkout_to_type')=='asset') {
                 if (is_null($target = Asset::find(request('asset_id')))) {
@@ -419,6 +431,10 @@ class LicensesController extends Controller
         $return_to = User::find($licenseSeat->assigned_to);
         if (!$return_to) {
             $return_to = Asset::find($licenseSeat->asset_id);
+        }
+
+        if (preg_match('@ADMIN-\d+@', request('note')) !== 1) {
+            return redirect()->back()->withInput()->with('error', trans('validation.hsdrn.note_is_empty'));
         }
 
         // Update the asset data

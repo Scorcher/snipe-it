@@ -342,6 +342,10 @@ class ComponentsController extends Controller
                     ->withInput();
             }
 
+            if (preg_match('@ADMIN-\d+@', $request->input('note')) !== 1) {
+                return redirect()->back()->withInput()->with('error', trans('validation.hsdrn.note_is_empty'));
+            }
+
             // Validation passed, so let's figure out what we have to do here.
             $qty_remaining_in_checkout = ($component_assets->assigned_qty - (int)$request->input('checkin_qty'));
 
