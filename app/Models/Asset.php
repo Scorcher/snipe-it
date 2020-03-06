@@ -1050,7 +1050,7 @@ class Asset extends Depreciable
                     ->orWhere('assets.notes', 'LIKE', '%'.$search.'%');
             }
 
-        })->withTrashed()->whereNull("assets.deleted_at"); //workaround for laravel bug
+        })->orderBy('assets.name', 'desc')->withTrashed()->whereNull("assets.deleted_at"); //workaround for laravel bug
     }
 
 
